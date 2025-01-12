@@ -4,7 +4,7 @@ class Student {
   final int age;
   final String department;
   final String email;
-  final String? imageurl;
+  final String imageurl;
 
   Student({
     this.id,
@@ -12,17 +12,17 @@ class Student {
     required this.age,
     required this.department,
     required this.email,
-    this.imageurl,
+    required this.imageurl,
   });
 
   static fromMap(Map<String, dynamic> std) {
     return Student(
       id: std['id'],
-      name: std['name'],
-      age: std['age'],
-      department: std['department'],
-      email: std['email'],
-      imageurl: std['imageurl'],
+      name: std['name'] ?? '',
+      age: std['age'] ?? 0,
+      department: std['department'] ?? '',
+      email: std['email'] ?? '',
+      imageurl: std['imageurl'] ?? '',
     );
   }
 }

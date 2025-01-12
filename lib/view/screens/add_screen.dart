@@ -1,16 +1,24 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:student_management_app/constants/color.dart';
+import 'package:student_management_app/controller/controller.dart';
+import 'package:student_management_app/model/student.dart';
+import 'package:student_management_app/view/widget/text_field.dart';
 
 class AddScreen extends StatelessWidget {
-  const AddScreen({super.key});
+  AddScreen({super.key});
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController departmentController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final controller = Get.put(Controller());
 
   @override
   Widget build(BuildContext context) {
     final formkey = GlobalKey<FormState>();
-    String? imagepath;
     final imagePicker = ImagePicker();
     return Scaffold(
       appBar: AppBar(
@@ -28,104 +36,86 @@ class AddScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GestureDetector(
-                onTap: () async {
-                  final image =
-                      await imagePicker.pickImage(source: ImageSource.gallery);
-                  if (image != null) {
-                    imagepath = image.path;
-                  }
-                },
-                child: CircleAvatar(
-                  radius: 60,
-                  backgroundImage: FileImage(File(imagepath!)),
-                ),
-              ),
-              SizedBox(height: 25),
-              TextFormField(
-                keyboardType: TextInputType.name,
-                decoration: const InputDecoration(
-                  labelText: "name",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: black, width: 2),
-                  ),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "name is required";
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 25),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: "Age",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: black, width: 2),
-                  ),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Age is required";
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 25),
-              TextFormField(
-                keyboardType: TextInputType.name,
-                decoration: const InputDecoration(
-                  labelText: "Department",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: black, width: 2),
-                  ),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Department is required";
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 25),
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: "Email",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: black, width: 2),
-                  ),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Email is required";
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 25),
-              ElevatedButton(onPressed: () async {
-                if (formkey.currentState!.validate()) {
-                  if (imagepath == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("Please select an image"),
-                      backgroundColor: black,
-                    ));
-                    return;
-                  }
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Student Registered Successfully"),
-                      backgroundColor: black,
-                    ),
-                  );
+              GestureDetector(onTap: () async {
+                final image =
+                    await imagePicker.pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  controller.imagePick(image.path);
                 }
-              },
-              style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(black),
-              ), child: const Text("REGISTER", style: TextStyle(color: white)),
+              }, child: Obx(
+                () {
+                  return controller.imagePath.isNotEmpty
+                      ? CircleAvatar(
+                          radius: 60,
+                          backgroundImage:
+                              FileImage(File(controller.imagePath.value)),
+                        )
+                      : const CircleAvatar(
+                          radius: 80,
+                          backgroundColor: black,
+                          foregroundColor: white,
+                          child: Icon(
+                            Icons.person,
+                            size: 70,
+                          ),
+                        );
+                },
+              )),
+              SizedBox(height: 25),
+              CustomTextField(
+                  type: TextInputType.name,
+                  label: "Name",
+                  validate: "Name is Required",
+                  controller: nameController),
+              SizedBox(height: 25),
+              CustomTextField(
+                  type: TextInputType.number,
+                  label: "Age",
+                  validate: "Age is Required",
+                  controller: ageController),
+              SizedBox(height: 25),
+              CustomTextField(
+                  type: TextInputType.name,
+                  label: "Department",
+                  validate: "Department is Required",
+                  controller: departmentController),
+              SizedBox(height: 25),
+              CustomTextField(
+                  type: TextInputType.emailAddress,
+                  label: "Email",
+                  validate: "Email is required",
+                  controller: emailController),
+              SizedBox(height: 25),
+              ElevatedButton(
+                onPressed: () async {
+                  if (formkey.currentState!.validate()) {
+                    if (controller.imagePath.string == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Please select an image"),
+                        backgroundColor: black,
+                      ));
+                      return;
+                    }
+                    final student = Student(
+                        name: nameController.text,
+                        age: int.parse(ageController.text),
+                        department: departmentController.text,
+                        email: emailController.text,
+                        imageurl: controller.imagePath.string);
+                    controller.addStudent(student);
+                    Get.back();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Student Registered Successfully"),
+                        backgroundColor: black,
+                      ),
+                    );
+                  }
+                },
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(black),
+                ),
+                child: const Text("REGISTER", style: TextStyle(color: white)),
               ),
             ],
           ),
