@@ -62,7 +62,9 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             IconButton(
                               onPressed: () {
-                                Get.to(EditScreen());
+                                Get.to(() => EditScreen(
+                                  student: controller.student[index],
+                                ));
                               },
                               icon: const Icon(Icons.edit),
                               color: black,

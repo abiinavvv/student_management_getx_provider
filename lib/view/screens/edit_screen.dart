@@ -1,11 +1,29 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:student_management_app/constants/color.dart';
+import 'package:student_management_app/controller/controller.dart';
+import 'package:student_management_app/model/student.dart';
+import 'package:student_management_app/view/widget/text_field.dart';
 
 class EditScreen extends StatelessWidget {
-  const EditScreen({super.key});
+  final Student student;
+  EditScreen({super.key, required this.student});
+  final controller = Get.put(Controller());
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController departmentController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    nameController.text = student.name;
+    ageController.text = student.age.toString();
+    departmentController.text = student.department;
+    emailController.text = student.email;
+    final imagePicker = ImagePicker();
     final formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
@@ -23,88 +41,69 @@ class EditScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GestureDetector(
-                onTap: () async {},
-                child: CircleAvatar(
-                  radius: 60,
-                  backgroundColor: black,
-                ),
-              ),
-              const SizedBox(height: 25),
-              TextFormField(
-                keyboardType: TextInputType.name,
-                decoration: const InputDecoration(
-                  labelText: "name",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: black, width: 2),
-                  ),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "name is required";
-                  }
-                  return null;
+              GestureDetector(onTap: () async {
+                final PickedImage = await imagePicker.pickImage(
+                  source: ImageSource.gallery,
+                );
+                if (PickedImage != null) {
+                  controller.imagePick(PickedImage.path);
+                }
+              }, child: Obx(
+                () {
+                  return controller.imagePath.isNotEmpty
+                      ? CircleAvatar(
+                          radius: 80,
+                          backgroundImage:
+                              FileImage(File(controller.imagePath.value)),
+                        )
+                      : CircleAvatar(
+                          backgroundImage: FileImage(File(student.imageurl)),
+                          radius: 80,
+                        );
                 },
-              ),
+              )),
               const SizedBox(height: 25),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: "Age",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: black, width: 2),
-                  ),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Age is required";
-                  }
-                  return null;
-                },
-              ),
+              CustomTextField(
+                  type: TextInputType.name,
+                  label: "Name",
+                  validate: "Name is required",
+                  controller: nameController),
               const SizedBox(height: 25),
-              TextFormField(
-                keyboardType: TextInputType.name,
-                decoration: const InputDecoration(
-                  labelText: "Department",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: black, width: 2),
-                  ),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Department is required";
-                  }
-                  return null;
-                },
-              ),
+              CustomTextField(
+                  type: TextInputType.number,
+                  label: "Age",
+                  validate: "Age is Required",
+                  controller: ageController),
               const SizedBox(height: 25),
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: "Email",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: black, width: 2),
-                  ),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Email is required";
-                  }
-                  return null;
-                },
-              ),
+              CustomTextField(
+                  type: TextInputType.name,
+                  label: "Department",
+                  validate: "Department is required",
+                  controller: departmentController),
+              const SizedBox(height: 25),
+              CustomTextField(
+                  type: TextInputType.emailAddress,
+                  label: "Email",
+                  validate: "Email is Required",
+                  controller: emailController),
               const SizedBox(height: 25),
               ElevatedButton(
                 onPressed: () async {
-                  if (formKey.currentState!.validate()) {
+                  await controller.updateStudent(Student(
+                      name: nameController.text,
+                      age: int.parse(ageController.text),
+                      department: departmentController.text,
+                      email: emailController.text,
+                      imageurl: controller.imagePath.value.isNotEmpty
+                          ? controller.imagePath.value
+                          : student.imageurl));
+                  Get.back();
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("Student Updated Successfully"),
                         backgroundColor: black,
                       ),
                     );
-                  }
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: black),
                 child: const Text("Update"),
