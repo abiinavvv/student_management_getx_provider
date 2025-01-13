@@ -8,8 +8,8 @@ import 'package:student_management_app/controller/controller.dart';
 import 'package:student_management_app/model/student.dart';
 import 'package:student_management_app/view/widget/text_field.dart';
 
-class AddScreen extends StatelessWidget {
-  AddScreen({super.key});
+class Add extends StatelessWidget {
+  Add({super.key});
   final TextEditingController nameController = TextEditingController();
   final TextEditingController departmentController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
@@ -18,37 +18,39 @@ class AddScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formkey = GlobalKey<FormState>();
-    final imagePicker = ImagePicker();
+    final formKey = GlobalKey<FormState>();
+
+    final imgPicker = ImagePicker();
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: white,
         title: const Text(
-          "REGISTER STUDENT",
-          style: TextStyle(color: white),
+          'REGISTERATION',
         ),
         backgroundColor: black,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(25),
+        padding: const EdgeInsets.all(25),
         child: Form(
-          key: formkey,
+          key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(onTap: () async {
-                final image =
-                    await imagePicker.pickImage(source: ImageSource.gallery);
-                if (image != null) {
-                  controller.imagePick(image.path);
+                final pickedImage = await imgPicker.pickImage(
+                  source: ImageSource.gallery,
+                );
+                if (pickedImage != null) {
+                  controller.imagePick(pickedImage.path);
                 }
               }, child: Obx(
                 () {
                   return controller.imagePath.isNotEmpty
                       ? CircleAvatar(
-                          radius: 60,
                           backgroundImage:
                               FileImage(File(controller.imagePath.value)),
+                          radius: 80,
                         )
                       : const CircleAvatar(
                           radius: 80,
@@ -61,37 +63,37 @@ class AddScreen extends StatelessWidget {
                         );
                 },
               )),
-              SizedBox(height: 25),
+              SizedBox(height: 25,),
               CustomTextField(
+                  controller: nameController,
                   type: TextInputType.name,
-                  label: "Name",
-                  validate: "Name is Required",
-                  controller: nameController),
-              SizedBox(height: 25),
+                  label: 'Name',
+                  validate: 'Name is required!'),
+              SizedBox(height: 25,),
               CustomTextField(
+                  controller: ageController,
                   type: TextInputType.number,
-                  label: "Age",
-                  validate: "Age is Required",
-                  controller: ageController),
-              SizedBox(height: 25),
+                  label: 'Age',
+                  validate: 'Age is required!'),
+              SizedBox(height: 25,),
               CustomTextField(
+                  controller: departmentController,
                   type: TextInputType.name,
-                  label: "Department",
-                  validate: "Department is Required",
-                  controller: departmentController),
-              SizedBox(height: 25),
+                  label: 'Department',
+                  validate: 'Department is required!'),
+              SizedBox(height: 25,),
               CustomTextField(
+                  controller: emailController,
                   type: TextInputType.emailAddress,
-                  label: "Email",
-                  validate: "Email is required",
-                  controller: emailController),
-              SizedBox(height: 25),
+                  label: 'Email',
+                  validate: 'Email is required!'),
+              SizedBox(height: 25,),
               ElevatedButton(
                 onPressed: () async {
-                  if (formkey.currentState!.validate()) {
+                  if (formKey.currentState!.validate()) {
                     if (controller.imagePath.string == null) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Please select an image"),
+                        content: Text("Select an image"),
                         backgroundColor: black,
                       ));
                       return;
@@ -101,21 +103,22 @@ class AddScreen extends StatelessWidget {
                         age: int.parse(ageController.text),
                         department: departmentController.text,
                         email: emailController.text,
-                        imageurl: controller.imagePath.string);
+                        imgurl: controller.imagePath.string);
                     controller.addStudent(student);
                     Get.back();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Student Registered Successfully"),
-                        backgroundColor: black,
-                      ),
-                    );
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Added successfully'),
+                      backgroundColor: black,
+                    ));
                   }
                 },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(black),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: black,
                 ),
-                child: const Text("REGISTER", style: TextStyle(color: white)),
+                child: const Text(
+                  'SAVE',
+                  style: TextStyle(color: white),
+                ),
               ),
             ],
           ),

@@ -1,95 +1,3 @@
-// import 'dart:math';
-
-// import 'package:get/get.dart';
-// import 'package:sqflite/sqflite.dart';
-// import 'package:student_management_app/model/student.dart';
-
-// class Controller extends GetxController {
-//   @override
-//   void onInit() {
-//     super.onInit();
-//     studentList.value = students;
-//   }
-// }
-
-// late Database database;
-// List<Student> students = [];
-// Rx<List<Student>> studentList = Rx<List<Student>>([]);
-// var imagePath = ''.obs;
-
-// void imagePick(String path) {
-//   imagePath.value = path;
-// }
-
-// Future<void> intialize() async {
-//   database = await openDatabase(
-//     'student.db',
-//     version: 1,
-//     onCreate: (Database db, int version) async {
-//       await db.execute(
-//           'CREATE TABLE students(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER, department TEXT, email TEXT, imageurl TEXT)');
-//     },
-//     onOpen: (db) => log(200),
-//   );
-// }
-
-// Future<void> addStudent(Student student) async {
-//   try {
-//     await database.rawInsert(
-//         'INSERT INTO students(name, age, department, email, imageurl) VALUES(?, ?, ?, ?, ?)',
-//         [
-//           student.name,
-//           student.age,
-//           student.department,
-//           student.email,
-//           student.imageurl
-//         ]);
-//     imagePath.value = '';
-//     log(200);
-//   } catch (e) {
-//     log(404);
-//   }
-// }
-
-// Future<void> getStudents() async {
-//   final result = await database.rawQuery('SELECT * FROM students');
-//   students.clear();
-//   print(result);
-
-//   for (var std in result) {
-//     students.add(Student.fromMap(std));
-//   }
-//   studentList.value = students;
-//   print(students.length);
-// }
-
-// Future<void> deleteStudent(int id) async {
-//   await database.rawDelete('DELETE FROM students WHERE id = ?', [id]);
-//   getStudents();
-// }
-
-// Future<void> updateStudent(Student student) async {
-//   await database.update(
-//       'student',
-//       {
-//         'name': student.name,
-//         'age': student.age,
-//         'department': student.department,
-//         'email': student.email,
-//         'imageurl': student.imageurl
-//       },
-//       where: 'id = ?',
-//       whereArgs: [student.id]);
-//   getStudents();
-// }
-
-// void search(String name) {
-//   List<int> searchList = [];
-//   if(name.isEmpty){
-//     studentList.value = List.from(students);
-//     return;
-//   }
-  
 import 'dart:developer';
 
 import 'package:get/get.dart';
@@ -140,7 +48,7 @@ class Controller extends GetxController {
           val.age,
           val.department,
           val.email,
-          val.imageurl,
+          val.imgurl,
         ],
       );
       imagePath.value = '';
@@ -183,7 +91,7 @@ class Controller extends GetxController {
           'age': updated.age,
           'department': updated.department,
           'email': updated.email,
-          'imgurl': updated.imageurl
+          'imgurl': updated.imgurl
         },
         where: 'id=?',
         whereArgs: [updated.id]);

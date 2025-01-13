@@ -9,95 +9,95 @@ import 'package:student_management_app/view/screens/edit_screen.dart';
 import 'package:student_management_app/view/screens/profile_screen.dart';
 import 'package:student_management_app/view/screens/search_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class Home extends StatelessWidget {
   final controller = Get.put(Controller());
-  HomeScreen({super.key});
+
+  Home({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Student Management",
-          style: TextStyle(color: Colors.white),
+          'STUDENT RECORD',
+          style: TextStyle(color: white),
         ),
         actions: [
           IconButton(
+            onPressed: () {
+              Get.to(() =>  Search(),
+                  transition: Transition.rightToLeftWithFade);
+            },
             icon: const Icon(
               Icons.search,
-              color: Colors.white,
+              color: white,
             ),
-            onPressed: () {
-              Get.to(() => SearchScreen(),
-                  transition: Transition.leftToRightWithFade);
-            },
           ),
         ],
         backgroundColor: black,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: GetBuilder<Controller>(
-          builder: (controller) {
-            return controller.student.isEmpty
-                ? const Center(
-                    child: Text("No Students Found"),
-                  )
-                : ListView.builder(
-                    itemCount: controller.student.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                          child: ListTile(
-                        onTap: () {
-                          Get.to(ProfileScreen(
-                            image: controller.student[index].imageurl,
-                            name: controller.student[index].name,
-                            department: controller.student[index].department,
-                            email: controller.student[index].email,
-                          ));
-                        },
-                        leading: CircleAvatar(
-                            radius: 25,
+          padding: const EdgeInsets.all(8.0),
+          child: GetBuilder<Controller>(
+            builder: (controller) {
+              return controller.student.isEmpty
+                  ? const Center(
+                      child: Text("No students added"),
+                    )
+                  : ListView.builder(
+                      itemCount: controller.student.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                            child: ListTile(
+                          onTap: () {
+                            Get.to(Profile(
+                                image: controller.student[index].imgurl!,
+                                name: controller.student[index].name,
+                                email: controller.student[index].email,
+                                department:
+                                    controller.student[index].department));
+                          },
+                          leading: CircleAvatar(
                             backgroundImage: FileImage(
-                                File(controller.student[index].imageurl))),
-                        title: Text(controller.student[index].name),
-                        subtitle: Text(controller.student[index].department),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Get.to(() => EditScreen(
-                                  student: controller.student[index],
-                                ));
-                              },
-                              icon: const Icon(Icons.edit),
-                              color: black,
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                controller.deleteStudent(
-                                    controller.student[index].id!);
-                              },
-                              icon: const Icon(Icons.delete),
-                              color: black,
-                            ),
-                          ],
-                        ),
-                      ));
-                    });
-          },
-        ),
-      ),
+                                File(controller.student[index].imgurl!)),
+                            radius: 25,
+                          ),
+                          title: Text(controller.student[index].name),
+                          subtitle: Text(controller.student[index].department),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    Get.to(() => Edit(student: controller.student[index]));
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: black,
+                                  )),
+                              IconButton(
+                                  onPressed: () {
+                                    controller.deleteStudent(
+                                        controller.student[index].id!);
+                                  },
+                                  icon: const Icon(Icons.delete, color: black))
+                            ],
+                          ),
+                        ));
+                      });
+            },
+          )),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Get.to(() => AddScreen());
+          Get.to(() => Add());
         },
-        label: const Text("ADD",
-        style: TextStyle(color: white, fontSize: 20, fontWeight: FontWeight.w400),),
         backgroundColor: black,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        icon: Icon(
+        label: const Text(
+          "Add Student ",
+          style: TextStyle(
+              color: white, fontSize: 20, fontWeight: FontWeight.w400),
+        ),
+        icon: const Icon(
           Icons.add,
           color: white,
         ),

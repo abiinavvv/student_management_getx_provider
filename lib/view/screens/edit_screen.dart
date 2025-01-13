@@ -8,9 +8,9 @@ import 'package:student_management_app/controller/controller.dart';
 import 'package:student_management_app/model/student.dart';
 import 'package:student_management_app/view/widget/text_field.dart';
 
-class EditScreen extends StatelessWidget {
+class Edit extends StatelessWidget {
   final Student student;
-  EditScreen({super.key, required this.student});
+  Edit({super.key, required this.student});
   final controller = Get.put(Controller());
   final TextEditingController nameController = TextEditingController();
   final TextEditingController departmentController = TextEditingController();
@@ -20,93 +20,100 @@ class EditScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     nameController.text = student.name;
-    ageController.text = student.age.toString();
     departmentController.text = student.department;
+    ageController.text = student.age.toString();
     emailController.text = student.email;
-    final imagePicker = ImagePicker();
+    final imgPicker = ImagePicker();
+
     final formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: white,
         title: const Text(
-          "EDIT",
-          style: TextStyle(color: white),
+          'EDIT',
         ),
         backgroundColor: black,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(25),
         child: Form(
-          key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(onTap: () async {
-                final PickedImage = await imagePicker.pickImage(
+                final pickedImage = await imgPicker.pickImage(
                   source: ImageSource.gallery,
                 );
-                if (PickedImage != null) {
-                  controller.imagePick(PickedImage.path);
+                if (pickedImage != null) {
+                  controller.imagePick(pickedImage.path);
                 }
               }, child: Obx(
                 () {
                   return controller.imagePath.isNotEmpty
                       ? CircleAvatar(
+                          backgroundImage: FileImage(File(controller.imagePath.value)),
                           radius: 80,
-                          backgroundImage:
-                              FileImage(File(controller.imagePath.value)),
                         )
                       : CircleAvatar(
-                          backgroundImage: FileImage(File(student.imageurl)),
+                          backgroundImage: FileImage(File(student.imgurl!)),
                           radius: 80,
                         );
                 },
               )),
-              const SizedBox(height: 25),
+              SizedBox(height: 25,),
               CustomTextField(
+                  controller: nameController,
                   type: TextInputType.name,
-                  label: "Name",
-                  validate: "Name is required",
-                  controller: nameController),
-              const SizedBox(height: 25),
+                  label: 'Name',
+                  validate: 'Name is required!'),
+              SizedBox(height: 25,),
               CustomTextField(
+                  controller: ageController,
                   type: TextInputType.number,
-                  label: "Age",
-                  validate: "Age is Required",
-                  controller: ageController),
-              const SizedBox(height: 25),
+                  label: 'Age',
+                  validate: 'Age is required!'),
+              SizedBox(height: 25,),
               CustomTextField(
+                  controller: departmentController,
                   type: TextInputType.name,
-                  label: "Department",
-                  validate: "Department is required",
-                  controller: departmentController),
-              const SizedBox(height: 25),
+                  label: 'Department',
+                  validate: 'Department is required!'),
+              SizedBox(height: 25,),
               CustomTextField(
+                  controller: emailController,
                   type: TextInputType.emailAddress,
-                  label: "Email",
-                  validate: "Email is Required",
-                  controller: emailController),
-              const SizedBox(height: 25),
+                  label: 'Email',
+                  validate: 'Email is required!'),
+              SizedBox(height: 25,),
               ElevatedButton(
                 onPressed: () async {
-                  await controller.updateStudent(Student(
-                      name: nameController.text,
-                      age: int.parse(ageController.text),
-                      department: departmentController.text,
-                      email: emailController.text,
-                      imageurl: controller.imagePath.value.isNotEmpty
-                          ? controller.imagePath.value
-                          : student.imageurl));
-                  Get.back();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Student Updated Successfully"),
-                        backgroundColor: black,
-                      ),
-                    );
+                 
+                    
+                    await controller.updateStudent(Student(
+                      id: student.id,
+                        name: nameController.text,
+                        age: int.parse(ageController.text),
+                        department: departmentController.text,
+                        email: emailController.text,
+                        imgurl: controller.imagePath.value.isNotEmpty
+                        ?controller.imagePath.value
+                        :student.imgurl));
+                    Get.back();
+
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Updated successfully'),
+                      backgroundColor: black,
+                    ));
+               
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: black),
-                child: const Text("Update"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: black,
+                ),
+                child: const Text(
+                  'SAVE',
+                  style: TextStyle(color: white),
+                ),
               ),
             ],
           ),

@@ -3,20 +3,26 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:student_management_app/constants/color.dart';
 
-class ProfileScreen extends StatelessWidget {
+class Profile extends StatelessWidget {
   final String image;
   final String name;
   final String email;
   final String department;
-  const  ProfileScreen({super.key, required this.image, required this.name, required this.email, required this.department});
+
+  const Profile(
+      {super.key,
+      required this.image,
+      required this.name,
+      required this.email,
+      required this.department});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "P R O F I L E",
-          style: TextStyle(color: Colors.white),
+        foregroundColor: white,
+        title: const Text(
+          'PROFILE',
         ),
         backgroundColor: black,
       ),
@@ -27,17 +33,32 @@ class ProfileScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 25),
-              CircleAvatar(
-                radius: 80,
-                backgroundImage: FileImage(File(image)),
+              const SizedBox(
+                height: 25,
               ),
-              const SizedBox(height: 25),
-              Text(name),
-              const SizedBox(height: 25),
-              Text(department),
-              const SizedBox(height: 25),
-              Text(email),
+              CircleAvatar(radius: 80, backgroundImage: FileImage(File(image))),
+              const SizedBox(
+                height: 25,
+              ),
+              Text(
+                name,
+                style:
+                    const TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              Text(
+                department,
+                style: const TextStyle(fontSize: 15),
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              Text(
+                email,
+                style: const TextStyle(fontSize: 20),
+              )
             ],
           ),
         ),
