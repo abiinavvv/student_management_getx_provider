@@ -49,7 +49,12 @@ class HomeScreen extends StatelessWidget {
                       return Card(
                           child: ListTile(
                         onTap: () {
-                          Get.to(ProfileScreen());
+                          Get.to(ProfileScreen(
+                            image: controller.student[index].imageurl,
+                            name: controller.student[index].name,
+                            department: controller.student[index].department,
+                            email: controller.student[index].email,
+                          ));
                         },
                         leading: CircleAvatar(
                             radius: 25,

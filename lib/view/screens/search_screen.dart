@@ -43,7 +43,10 @@ class SearchScreen extends StatelessWidget {
                     return Card(
                       child: ListTile(
                         onTap: () {
-                          Get.to(ProfileScreen());
+                          Get.to(ProfileScreen(image: controller.studentFound.value[index].imageurl,
+                          name: controller.studentFound.value[index].name,
+                          email: controller.studentFound.value[index].email,
+                          department: controller.studentFound.value[index].department,));
                         },
                         leading: CircleAvatar(
                           backgroundImage: FileImage(File(
