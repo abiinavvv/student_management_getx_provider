@@ -20,7 +20,7 @@ class Search extends StatelessWidget {
             title: const Text(
               'SEARCH',
             ),
-            backgroundColor: black,
+            backgroundColor: blue,
           ),
           body: Column(
             children: [
@@ -29,7 +29,7 @@ class Search extends StatelessWidget {
                 child: Theme(
                   data: ThemeData(
                       cupertinoOverrideTheme:
-                          const CupertinoThemeData(primaryColor: black)),
+                          const CupertinoThemeData(primaryColor: blue)),
                   child: CupertinoSearchTextField(
                     onChanged: (value) {
                       searchValue.search(value);
@@ -37,7 +37,7 @@ class Search extends StatelessWidget {
                     padding: const EdgeInsets.all(10),
                     prefixIcon: const Icon(
                       Icons.search,
-                      color: black,
+                      color: blue,
                     ),
                   ),
                 ),

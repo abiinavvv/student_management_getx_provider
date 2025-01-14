@@ -28,7 +28,7 @@ class Add extends StatelessWidget {
           title: const Text(
             'REGISTERATION',
           ),
-          backgroundColor: black,
+          backgroundColor: blue,
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(25),
@@ -54,7 +54,7 @@ class Add extends StatelessWidget {
                           )
                         : const CircleAvatar(
                             radius: 80,
-                            backgroundColor: black,
+                            backgroundColor: blue,
                             foregroundColor: white,
                             child: Icon(
                               Icons.person,
@@ -93,7 +93,7 @@ class Add extends StatelessWidget {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content: Text("Select an image"),
-                          backgroundColor: black,
+                          backgroundColor: blue,
                         ));
                         return;
                       }
@@ -106,12 +106,12 @@ class Add extends StatelessWidget {
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('Added successfully'),
-                        backgroundColor: black,
+                        backgroundColor: blue,
                       ));
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: black,
+                    backgroundColor: blue,
                   ),
                   child: const Text(
                     'SAVE',
