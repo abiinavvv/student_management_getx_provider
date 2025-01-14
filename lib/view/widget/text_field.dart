@@ -21,7 +21,7 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         enabledBorder:
-            const OutlineInputBorder(borderSide: BorderSide(color: black)),
+            const OutlineInputBorder(borderSide: BorderSide(color: blue)),
       ),
       validator: (value) {
         if (value!.isEmpty) {

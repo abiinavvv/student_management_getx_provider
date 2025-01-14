@@ -34,7 +34,7 @@ class Home extends StatelessWidget {
             ),
           ),
         ],
-        backgroundColor: black,
+        backgroundColor: blue,
       ),
       body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -73,14 +73,14 @@ class Home extends StatelessWidget {
                                   },
                                   icon: const Icon(
                                     Icons.edit,
-                                    color: black,
+                                    color: blue,
                                   )),
                               IconButton(
                                   onPressed: () {
                                     controller.deleteStudent(
                                         controller.student[index].id!);
                                   },
-                                  icon: const Icon(Icons.delete, color: black))
+                                  icon: const Icon(Icons.delete, color: blue))
                             ],
                           ),
                         ));
@@ -91,7 +91,7 @@ class Home extends StatelessWidget {
         onPressed: () {
           Get.to(() => Add());
         },
-        backgroundColor: black,
+        backgroundColor: blue,
         label: const Text(
           "Add Student ",
           style: TextStyle(

@@ -24,7 +24,7 @@ class Profile extends StatelessWidget {
         title: const Text(
           'PROFILE',
         ),
-        backgroundColor: black,
+        backgroundColor: blue,
       ),
       body: Center(
         child: Padding(

@@ -27,7 +27,7 @@ class Add extends StatelessWidget {
         title: const Text(
           'REGISTERATION',
         ),
-        backgroundColor: black,
+        backgroundColor: blue,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(25),
@@ -52,9 +52,9 @@ class Add extends StatelessWidget {
                               FileImage(File(controller.imagePath.value)),
                           radius: 80,
                         )
-                      : const CircleAvatar(
+                      :  CircleAvatar(
                           radius: 80,
-                          backgroundColor: black,
+                          backgroundColor: blue,
                           foregroundColor: white,
                           child: Icon(
                             Icons.person,
@@ -91,13 +91,6 @@ class Add extends StatelessWidget {
               ElevatedButton(
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    if (controller.imagePath.string == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Select an image"),
-                        backgroundColor: black,
-                      ));
-                      return;
-                    }
                     final student = Student(
                         name: nameController.text,
                         age: int.parse(ageController.text),
@@ -108,12 +101,12 @@ class Add extends StatelessWidget {
                     Get.back();
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('Added successfully'),
-                      backgroundColor: black,
+                      backgroundColor: blue,
                     ));
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: black,
+                  backgroundColor: blue,
                 ),
                 child: const Text(
                   'SAVE',

@@ -32,7 +32,7 @@ class Edit extends StatelessWidget {
         title: const Text(
           'EDIT',
         ),
-        backgroundColor: black,
+        backgroundColor: blue,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(25),
@@ -103,12 +103,12 @@ class Edit extends StatelessWidget {
 
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('Updated successfully'),
-                      backgroundColor: black,
+                      backgroundColor: blue,
                     ));
                
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: black,
+                  backgroundColor: blue,
                 ),
                 child: const Text(
                   'SAVE',
